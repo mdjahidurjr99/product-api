@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Form</title>
+    <link rel="stylesheet" href="/style/milligram.css">
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- <span class="loader"></span> -->
+    <div class="container">
+        <h1>Product Form</h1>
+        <div class="row">
+            <div class="column">
+                <label>Product Name</label>
+                <input type="text" id="productName" name="productName" required>
+                <label>Product Code</label>
+                <input type="text" id="productCode" name="productCode" required>
+                <label>Product Image</label>
+                <input type="text" id="productImg" name="productImg" required>
+                <label>Unit Price</label>
+                <input type="number" id="unitPrice" name="unitPrice" required>
+                <label>Product Qty</label>
+                <input type="number" id="productQty" name="productQty" required>
+                <label>Product Total</label>
+                <input type="number" id="productTotal" name="productTotal" required>
+                <button type="submit" onclick="addProduct()">Add Product</button>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script src="/js/axios.min.js"></script>
+    <script>
+        async function addProduct() {
+            let productName = document.getElementById('productName').value
+            let productCode= document.getElementById('productCode').value
+            let productImg = document.getElementById('productImg').value
+            let unitPrice = document.getElementById('unitPrice').value
+            let productQty = document.getElementById('productQty').value
+            let productTotal = document.getElementById('productTotal').value
+
+            let URL = 'http://164.68.107.70:6060/api/v1/CreateProduct'
+
+            // document.getElementById('loader').classList.remove('d-none');
+
+            let res = await axios.post(URL, {
+                Img:productImg,
+                ProductCode:productCode,
+                ProductName: productName,
+                Qty: productQty,
+                TotalPrice: productTotal,
+                UnitPrice: unitPrice
+            })
+            // document.getElementById('loader').classList.add('d-none');
+
+        if(res.status === 200){
+            window.location = 'index.html'
+        }else{
+            alert('error')
+        }
+
+            
+        };
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product API</title>
+    <link rel="stylesheet" href="/style/milligram.css">
+    <link rel="stylesheet" href="/style/style.css">
+    
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <h1>Product API</h1>
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="create.html">Create New</a></li>
+                
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Product List</h1>
+        <table>
+            <thead></thead>
+                <tr>
+                    
+                    <th>Product Name</th>
+                    <th>Product Code</th>
+                    <th>Product Image</th>
+                    <th>Unit Price</th>
+                    <th>Qty</th>
+                    <th>Total Price</th>
+                    <th>Delete</th>
+                    <th>Update</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="projectList"></tbody>
+        </table>
+    </div>
+
+    <script src="/js/axios.min.js"></script>
+    <script src="https://kit.fontawesome.com/aef1286f6c.js" crossorigin="anonymous"></script>
+    <script>
+        async function getList() {
+            let URL = 'http://164.68.107.70:6060/api/v1/ReadProduct'
+            let res = await axios.get(URL);
+
+            if(res.status === 200){
+                let list = res.data['data'];
+                list.forEach((item) => {
+                    document.getElementById('projectList').innerHTML += (`
+                    <tr>
+                        <td>${item['ProductName']}</td>
+                        <td>${item['ProductCode']}</td>
+                        <td class="p-img"><img src="${item['Img']}" alt=""></td>
+                        <td>${item['UnitPrice']}</td>
+                        <td>${item['Qty']}</td>
+                        <td>${item['TotalPrice']}</td>
+                        <td><button class="d-btn" onclick="deleteItem('${item['_id']}')"><i class="fa-regular fa-trash-can"></i></button></td>
+                        <td><button class="u-btn" onclick="updateItem('${item['_id']}')"><i class="fa-regular fa-pen-to-square"></i></button></td>
+                        
+                    </tr>`)
+                })
+            }else{
+                alert('wrong')
+            }
+        }
+
+        async function deleteItem(id) {
+            let URL = `http://164.68.107.70:6060/api/v1/DeleteProduct/${id}`
+            let res = await axios.get(URL);
+            if(res.status === 200){
+                confirm('Are sure to delete this product');
+                document.getElementById('projectList').innerHTML = ''
+                await getList()
+                
+
+            }
+        }
+        
+        async function updateItem(id) {
+            window.location = `update.html?id=${id}`
+        }
+        
+
+        getList()
+    </script>
+</body>
+</html>
